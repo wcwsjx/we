@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<script src="jquery-3.3.1.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<style>
+		*{
+			margin: 0;
+			padding: 0;
+		}
+		.container{
+			margin: 0 auto;
+			width: 1226px;
+			height: auto;
+		}
+		section{
+			margin-bottom: 20px;
+			width: 100%;
+			height: auto;
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: space-between;
+			align-content: space-between;
+		}
+		section>img{
+			background: red;
+			flex-shrink: 0;
+			width: 234px;
+			height: 300px;
+			margin-bottom: 10px;
+		}
+		section>img:nth-child(n+5){
+			margin-bottom: 0;
+		}
+		header{
+			width: 100%;
+			height: 80px;
+			background: #000;
+			margin-bottom: 40px;
+		}
+		footer{
+			width: 100%;
+			height: 80px;
+			background: #000;
+			margin-top: 40px;
+		}
+		.fixed{
+			width: 40px;
+			height: auto;
+			position: fixed;
+			bottom: 120px;
+			left: -40px;
+			text-align: center;
+			line-height: 40px;
+			transition: .3s;
+		}
+		.fixed>div{
+			width: 100%;
+			height: 40px;
+			margin-bottom: 10px;
+			background: #ccc;
+		}
+		.fixed>div.active{
+			background: #ff6700;
+		}
+		.backTop{
+			width: 40px;
+			height: 40px;
+			background: #00BFFF; 
+			position: fixed;
+			bottom: 70px;
+			left: -40px;
+			transition: .3s;
+			font-size: 12px;
+			text-align: center;
+			line-height: 40px;
+			color: #fff;
+		}
+	</style>
+<body>
+	<div class="container">
+		<section>
+			<img imgsrc="057.jpg" src="" alt="">
+			<img imgsrc="057.jpg" src="" alt="">
+			<img imgsrc="057.jpg" src="" alt="">
+			<img imgsrc="057.jpg" src="" alt="">
+			<img imgsrc="057.jpg" src="" alt="">
+			<img imgsrc="057.jpg" src="" alt="">
+			<img imgsrc="057.jpg" src="" alt="">
+			<img imgsrc="057.jpg" src="" alt="">
+			<img imgsrc="057.jpg" src="" alt="">
+			<img imgsrc="057.jpg" src="" alt="">
+		</section>
+		<section>
+			<img imgsrc="1.jpg" src="" alt="">
+			<img imgsrc="1.jpg" src="" alt="">
+			<img imgsrc="1.jpg" src="" alt="">
+			<img imgsrc="1.jpg" src="" alt="">
+			<img imgsrc="1.jpg" src="" alt="">
+			<img imgsrc="1.jpg" src="" alt="">
+			<img imgsrc="1.jpg" src="" alt="">
+			<img imgsrc="1.jpg" src="" alt="">
+			<img imgsrc="1.jpg" src="" alt="">
+			<img imgsrc="1.jpg" src="" alt="">
+		</section>
+		<section>
+			<img imgsrc="057.jpg" src="" alt="">
+			<img imgsrc="057.jpg" src="" alt="">
+			<img imgsrc="057.jpg" src="" alt="">
+			<img imgsrc="057.jpg" src="" alt="">
+			<img imgsrc="057.jpg" src="" alt="">
+			<img imgsrc="057.jpg" src="" alt="">
+			<img imgsrc="057.jpg" src="" alt="">
+			<img imgsrc="057.jpg" src="" alt="">
+			<img imgsrc="057.jpg" src="" alt="">
+			<img imgsrc="057.jpg" src="" alt="">
+		</section>
+		<section>
+			<img imgsrc="1.jpg" src="" alt="">
+			<img imgsrc="1.jpg" src="" alt="">
+			<img imgsrc="1.jpg" src="" alt="">
+			<img imgsrc="1.jpg" src="" alt="">
+			<img imgsrc="1.jpg" src="" alt="">
+			<img imgsrc="1.jpg" src="" alt="">
+			<img imgsrc="1.jpg" src="" alt="">
+			<img imgsrc="1.jpg" src="" alt="">
+			<img imgsrc="1.jpg" src="" alt="">
+			<img imgsrc="1.jpg" src="" alt="">
+		</section>
+	</div>
+	<div class="fixed">
+		<div>1</div>
+		<div>2</div>
+		<div>3</div>
+		<div>4</div>
+	</div>
+	<div class="backTop">返回</div>
+	<footer></footer>
+
+	<script>
+		let colorarr=['rgba(0,255,0,0.7)','orange','rgba(255,0,0,0.7)','rgba(0,255,0,0.7)','rgba(0,0,255,0.7)'];
+		//数组用于保存每个模块的高度
+		let arr=[];
+		//循环的向数组中添加每个模块的高度
+		$("section").each(function(index,val){
+			//val不是jQuery对象,无法使用jQuery方法
+			arr.push($(val).offset().top);
+			
+		});
+
+		$(window).scroll(function(){
+			//实时检测滚动条的高度
+			let bodyTop=$(document).scrollTop();
+			if(bodyTop+$(window).innerHeight()/2>arr[1]){
+				$(".fixed").css("left","10px");
+				$(".backTop").css("left","10px");
+			}else if(bodyTop+$(window).innerHeight()/2<arr[1]){
+				$(".fixed").css("left","-40px");
+				$(".backTop").css("left","-40px");
+			}
+			$.each(arr,function(index,val){
+				if(bodyTop+$(window).innerHeight()/2>val){
+					$(".fixed div").eq(index).css("background",colorarr[index]).siblings().css("background","#ccc");
+
+					let imgs=$("section").eq(index).children('img');
+					imgs.each(function(index1,val1){
+						let imgsrc=$(val1).attr("imgsrc");
+						$(val1).attr("src",imgsrc);
+						
+					});
+				}
+			});
+			
+		});
+		//楼层
+		$(".fixed div").click(function(){
+			$(this).css("background",colorarr[$(this).index()]).siblings().css("background","#ccc");
+				
+			$("html").animate({scrollTop:arr[$(this).index()]});
+					
+		});
+		//返回顶部
+		$(".backTop").click(function(){
+			$("html").animate({scrollTop:0});
+		});
+		
+	</script>
+</body>
+</html>
